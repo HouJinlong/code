@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- https://www.jianshu.com/p/6b062af8cf01 -->
+    <div id="app">
+      <!-- <i-button :text="text" @update:text="text = $event"></i-button> -->
+      <i-button v-bind:text.sync="text"></i-button>
+      <br>
+      <br>
+      <br>
+      <i-button1 v-bind.sync="obj"></i-button1>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script>
+      Vue.component("i-button", {
+        props: ["text"],
+        template: `
+                <button @click="onClick">
+                {{ text }}
+                </button>
+            `,
+        methods: {
+          onClick() {
+            // this.text = '文字修改了';
+            this.$emit("update:text", "文字修改了");
+          }
+        }
+      });
+      Vue.component("i-button1", {
+        props: ["name", "age"],
+        template: `
+                <div>
+                   <button @click="onClick">
+                    点击改变
+                    </button>
+                    {{ name }}+{{ age }}
+                </div>
+            `,
+        methods: {
+          onClick() {
+            this.$emit('update:name', 'hou')
+            this.$emit('update:age', '19')
+          }
+        }
+      });
+      new Vue({
+        el: "#app",
+        data: {
+          text: "点我修改文字",
+          obj: {
+            name: "侯晋龙",
+            age: 18
+          }
+        },
+        methods: {}
+      });
+    </script>
+  </body>
+</html>

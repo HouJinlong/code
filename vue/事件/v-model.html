@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- https://www.jianshu.com/p/3dbbbc7a259c -->
+    <div id="app">
+      <table>
+        <tr>
+          <td>
+            <input v-model="text" /> <br>
+            {{ text }}
+          </td>
+          <td>
+            <input :value="text1" @input="text1 = $event.target.value" /> <br>
+            {{ text1 }}
+          </td>
+          <td>
+            <my-component  v-model="text2" :value1="'123'"></my-component>
+          </td>
+          <td>
+            <base-checkbox v-model="lovingVue"></base-checkbox> <br>
+            {{ lovingVue }}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script>
+     
+      Vue.component('my-component', {
+            template: `<div>
+                    <button @click="handleInput">按钮</button><br>
+                {{value}}
+                
+             </div>`,
+            props: ['value','value1'], //接收一个 v-model默认对应value 
+            methods: {
+                handleInput() {
+                    console.log(this.value1)
+                    this.$emit('input', '222222'); //触发 input 事件，并传入新值
+                    //点击后（测试1）（测试2）的值均会变化成'222222'
+                }
+            }
+        });
+
+        Vue.component("base-checkbox", {
+            model: {
+                prop: "checked",
+                event: "change"
+            },
+            props: {
+                checked: Boolean
+            },
+            template: `
+                    <input
+                    type="checkbox"
+                    v-bind:checked="checked"
+                    v-on:change="$emit('change', $event.target.checked)"
+                    >
+                `
+        });
+      new Vue({
+        el: "#app",
+        data: {
+          text: "v-model",
+          text1: "bind+@input",
+          text2:'v-model+@input',
+          lovingVue: false
+        }
+      });
+    </script>
+  </body>
+</html>
